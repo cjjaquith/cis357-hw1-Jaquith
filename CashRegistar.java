@@ -5,9 +5,67 @@
 // GitHub: https://github.com/cjjaquith/cis357-hw1-Jaquith
 // Instructor: Il-Hyung Cho
 // Program Description: This program simulates a cash registar at a grocery store.
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.Locale;
 import java.util.Scanner;
 /** Javadoc commenets for CashRegistar.java */
+class Item {
+    public int[] itemCode;
+    public String[] itemName;
+    public float[] unitPrice;
+    /** Item constructor */
+    Item() {
+        String [] data = new String[0];
+        data = readFile(data);
+
+
+        itemCode = new int[data.length];
+        itemName = new String[data.length];
+        unitPrice = new float[data.length];
+
+        for (int i = 0; i < data.length; i++) {
+            String[] dataDivided = data[i].split(",");
+            itemCode[i] = Integer.parseInt(dataDivided[0]);
+            itemName[i] = dataDivided[1];
+            unitPrice[i] = Float.parseFloat(dataDivided[2]);
+        }
+    }
+    public String [] readFile(String [] fileData) {
+        try {
+            File eleFile = new File("SortingData.txt");
+            int arraySize = 0;
+            String line;
+
+            BufferedReader br = new BufferedReader(new FileReader(eleFile));
+            while((line = br.readLine()) != null ) {
+                arraySize++;
+            }
+            br.close();
+
+            fileData = new String[arraySize];
+
+            br = new BufferedReader(new FileReader(eleFile));
+            int i =0;
+            while((line = br.readLine()) != null) {
+                fileData[i] = line;
+                i++;
+            }
+            br.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fileData;
+    }
+    public String getName(int code) {
+        return itemName[code - 1];
+    }
+    public double getPrice(int code) {
+        return unitPrice[code - 1];
+    }
+}
 public class CashRegistar {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -17,7 +75,7 @@ public class CashRegistar {
         double totalDataCode = 0;
         double sales = 0;
 
-        System.out.println("Welcome to Jaquiht's cash register system");
+        System.out.println("Welcome to Jaquith's cash register system");
         System.out.println ("");
         System.out.println("Beginnig a new sale (Y/N) ");
         String answer = input.next();
